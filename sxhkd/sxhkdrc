@@ -1,0 +1,2 @@
+F12
+    tdrop -ma -h 25% -y 75% alacritty --class tdrop
