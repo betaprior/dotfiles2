@@ -1,0 +1,6 @@
+window:
+  decorations: "none"
+  opacity: 0.8
+
+key_bindings:
+  - { key: F11, action: ToggleFullscreen }
