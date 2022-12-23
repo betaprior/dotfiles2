@@ -36,9 +36,10 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
 exec --no-startup-id sxhkd
 
-bindsym $mod+Shift+F7 exec --no-startup-id xrandr --fb 1920x1080 --output DP-1-1 --off --output eDP-1 --crtc 0 --gamma 1.0:1.0:1.0 --mode 1920x1080 --pos 0x0 --primary --rate 60.01
-bindsym $mod+F7 exec --no-startup-id autorandr --skip-option set external
+bindsym $mod+Shift+F7 exec --no-startup-id xrandr --fb 1920x1080 --output DP-3-1 --off --output eDP-1 --crtc 0 --gamma 1.0:1.0:1.0 --mode 1920x1080 --pos 0x0 --primary --rate 60.01
+bindsym $mod+F7 exec --no-startup-id autorandr --skip-option set external3
 
+bindsym $mod+F2 exec --no-startup-id ~/bin-local/rofi_audio_set_default_sink.py
 
 bindsym $mod+t [class="ttrm"] scratchpad show; move position center
 exec_always --no-startup-id pgrep -f '^alacritty --class ttrm,ttrm' || alacritty --class ttrm,ttrm
@@ -54,11 +55,12 @@ exec_always --no-startup-id xmodmap -e "clear lock" #disable caps lock switch
 exec_always --no-startup-id xmodmap -e "keysym Caps_Lock = Escape" #set caps_lock as escape
 
 # Use pactl to adjust volume in PulseAudio.
-set $refresh_i3status killall -SIGUSR1 i3status
+set $refresh_i3status pkill -SIGRTMIN+1 i3blocks
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
 bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
 
@@ -267,8 +269,11 @@ exec --no-startup-id ibus exit
 exec picom
 exec_always --no-startup-id xfce4-power-manager
 
-exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
-exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
+#set $touchpad "SynPS/2 Synaptics TouchPad"
+set $touchpad "ELAN0672:00 04F3:3187 Touchpad"
+exec xinput set-prop $touchpad "libinput Tapping Enabled" 1
+exec xinput set-prop $touchpad "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
+
 
 
 bindsym $alt+F2 exec rofi -show run
@@ -281,3 +286,6 @@ for_window [title="(?i)gnome-control-center*"] floating enable
 # bindsym $alt+Shift+Tab exec i3-alt-tab.py prev all
 exec --no-startup-id setxkbmap -layout us,ru -variant ,phonetic -option 'grp:shifts_toggle'
 
+# Experimental:
+# https://www.reddit.com/r/i3wm/comments/b7d3i5/is_it_possible_to_switch_between_multiple/
+bindsym $mod+Tab fullscreen toggle, focus left, fullscreen toggle
